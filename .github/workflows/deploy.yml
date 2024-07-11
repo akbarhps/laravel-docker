@@ -1,0 +1,23 @@
+name: deploy
+on:
+  push:
+    branches:
+      - your_deployment_branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_SSH_HOST }}
+          username: ${{ secrets.SERVER_SSH_USERNAME }}
+          password: ${{ secrets.SERVER_SSH_PASSWORD }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          command_timeout: 30m
+          script: |
+            curl -L "https://gist.githubusercontent.com/akbarhps/8e7d4b3f3e558a5f95c32e990b4decdd/raw/dc85e588253b98a9b4ded1c2b57f0b48163772dc/deploy.sh" -o deploy.sh && chmod +x deploy.sh;
+            # change "git@github.com:Developer-UNIMED/laravel11-skeleton.git"
+            sudo ./deploy.sh "git@github.com:Developer-UNIMED/laravel11-skeleton.git";
